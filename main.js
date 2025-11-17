@@ -5,6 +5,7 @@ let camera, scene, renderer
 let world
 let stack = []
 let overhangs = []
+let lastTime
 const boxHeight = 1
 const originalBoxSize = 3
 
@@ -35,6 +36,7 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({antialias: true})
     renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setAnimationLoop(animate)
     document.body.append(renderer.domElement)
 }
 
@@ -77,4 +79,22 @@ function addOverHang(x, z, width, depth) {
     const y = boxHeight * (stack.length - 1)
     const overhang = generateBox(x, y, z, width, depth, true)
     overhangs.push(overhang)
+}
+
+function animate(time) {
+    if(lastTime) {
+        const timePassed = time - lastTime
+        updatePhysics(timePassed)
+        renderer.render(scene, camera)
+    }
+    lastTime = time
+}
+
+function updatePhysics(timePassed) {
+    world.step(timePassed / 1000)
+    
+    overhangs.forEach((el) => {
+        el.threejs.position.copy(el.cannonjs.position)
+        el.threejs.quaternion.copy(el.cannonjs.quaternion)
+    })
 }
