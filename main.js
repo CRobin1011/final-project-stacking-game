@@ -6,6 +6,8 @@ let world
 let stack = []
 let overhangs = []
 let lastTime
+let autopilot = true
+let gameEnded = false
 const boxHeight = 1
 const originalBoxSize = 3
 
@@ -97,4 +99,54 @@ function updatePhysics(timePassed) {
         el.threejs.position.copy(el.cannonjs.position)
         el.threejs.quaternion.copy(el.cannonjs.quaternion)
     })
+}
+
+function splitBlockAndNextOneIfOverlaps() {
+    if (gameEnded) return
+
+    const topLayer = stack.at(-1)
+    const previousLayer = stack.at(-2)
+    const direction = topLayer.direction
+
+    const size = direction === 'x' ? topLayer.width : topLayer.depth
+    const delta = topLayer.threejs.position[direction] - previousLayer.threejs.position[direction]
+    const overhangSize = Math.abs(delta)
+    const overlap = size - overhangSize
+    
+    if (overlap > 0) {
+        cutBox(topLayer, overlap, size, delta)
+        // Add overhang and next layer logic...
+    } else {
+        missedTheSpot()
+    }
+}
+
+function cutBox(topLayer, overlap, size, delta) {
+    const direction = topLayer.direction
+    const newWidth = direction === 'x' ? overlap : topLayer.width
+    const newDepth = direction === 'z' ? overlap : topLayer.depth
+
+    topLayer.width = newWidth
+    topLayer.depth = newDepth
+    
+    topLayer.threejs.scale[direction] = overlap / size
+    topLayer.threejs.position[direction] -= delta / 2
+    
+    topLayer.cannonjs.position[direction] -= delta / 2
+    const shape = new CANNON.Box(new CANNON.Vec3(newWidth / 2, boxHeight / 2, newDepth / 2))
+    topLayer.cannonjs.shapes = []
+    topLayer.cannonjs.addShape(shape)
+}
+
+function missedTheSpot() {
+    const topLayer = stack.at(-1)
+    addOverHang(
+        topLayer.threejs.position.x,
+        topLayer.threejs.position.z,
+        topLayer.width,
+        topLayer.depth
+    )
+    world.removeBody(topLayer.cannonjs)
+    scene.remove(topLayer.threejs)
+    gameEnded = true
 }
