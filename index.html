@@ -4,9 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="3D Stack Game - Stack blocks as high as you can!" />
     <title>3D Stack Game</title>
   </head>
-  <body>
+  <body class="game-state-menu">
+    <!-- Instructions Screen -->
+    <div id="instructions" class="ui-overlay">
+      <div class="ui-content">
+        <p>🎮 Stack the blocks on top of each other</p>
+        <p>Click, tap or press <strong>Space</strong> to start game</p>
+      </div>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div id="results" class="ui-overlay">
+      <div class="ui-content">
+        <p>💥 You missed the block</p>
+        <p>Tap to reset the game</p>
+      </div>
+    </div>
+    
+    <!-- Score Display -->
+    <div id="score" aria-label="Current Score">0</div>
+    
     <script type="module" src="/main.js"></script>
   </body>
 </html>
