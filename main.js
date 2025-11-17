@@ -11,6 +11,10 @@ let gameEnded = false
 const boxHeight = 1
 const originalBoxSize = 3
 
+const scoreElement = document.getElementById('score')
+const instructionsElement = document.getElementById('instructions')
+const resultsElement = document.getElementById('results')
+
 function init() {
     world = new CANNON.World()
     world.gravity.set(0, -10, 0)
@@ -150,3 +154,22 @@ function missedTheSpot() {
     scene.remove(topLayer.threejs)
     gameEnded = true
 }
+
+window.addEventListener('mousedown', eventHandler)
+window.addEventListener('keydown', (event) => {
+    if (event.key == ' ') {
+        event.preventDefault()
+        eventHandler()
+    }
+})
+
+resultsElement.addEventListener('click', (event) => {
+    event.preventDefault()
+    startGame()
+})
+
+function eventHandler() {
+    if (autopilot) startGame()
+    else splitBlockAndNextOneIfOverlaps()
+}
+
