@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, 
+body {
+  height: 100%;
+  color-scheme: dark;
+  font-size: 20px;
+  font-family: "Comic Sans MS", "Segoe UI", Tahoma, Geneva, sans-serif;
+  overflow: hidden; /* Prevent scrollbars during game */
+}
+
+canvas {
+  display: block;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #1a1a1a;
+}
+
+.ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  user-select: none;
+}
+
+.ui-content {
+  max-width: 320px;
+  padding: 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.ui-content p {
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.ui-content p:last-child {
+  margin-bottom: 0;
+}
+
+#instructions {
+  display: flex; /* Show by default for initial state */
+}
+
+#instructions .ui-content {
+  animation: fadeInScale 0.5s ease-out;
+}
+
+#results {
+  display: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#results:hover {
+  background: rgba(20, 20, 20, 0.9);
+}
+
+#results .ui-content {
+  animation: slideInUp 0.4s ease-out;
+  transition: transform 0.2s ease;
+}
+
+#results:hover .ui-content {
+  transform: scale(1.05);
+}
+
+#score {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 50;
+  font-family: "Arial", sans-serif;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    font-size: 18px;
+  }
+  
+  .ui-content {
+    max-width: 280px;
+    padding: 1.5rem;
+  }
+  
+  #score {
+    font-size: 2.5rem;
+    top: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html, body {
+    font-size: 16px;
+  }
+  
+  .ui-content {
+    max-width: 240px;
+    padding: 1rem;
+  }
+  
+  #score {
+    font-size: 2rem;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+#results:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+@media (prefers-contrast: high) {
+  .ui-overlay {
+    background: rgba(0, 0, 0, 0.95);
+  }
+  
+  .ui-content {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #ffffff;
+  }
+  
+  #score {
+    color: #ffffff;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+  }
+}
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 1.2rem;
+  z-index: 200;
+}
+
+.game-state-menu #instructions {
+  display: flex;
+}
+
+.game-state-playing #instructions,
+.game-state-playing #results {
+  display: none;
+}
+
+.game-state-game-over #results {
+  display: flex;
+}
+
+.game-state-game-over #instructions {
+  display: none;
+}
