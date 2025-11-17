@@ -184,3 +184,15 @@ function eventHandler() {
 function setRobotPrecision() {
     robotPrecision = Math.random() * 1 - 0.5
 }
+
+window.addEventListener('resize', () => {
+    const aspect = window.innerWidth / window.innerHeight
+    const width = 10
+    const height = width / aspect
+
+    camera.top = height / 2
+    camera.bottom = height / -2
+
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.render(scene, camera)
+})
